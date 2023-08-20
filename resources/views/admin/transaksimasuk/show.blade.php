@@ -13,9 +13,8 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>ID</th>
                             <th>Type Barang</th>
-                            <th>No PR</th>
-                            <th>No PO</th>
                             <th>No GRN</th>
                             <th>Supplier</th>
                             <th>Jenis</th>
@@ -48,29 +47,19 @@
                         <small class="float-right" id="tgl_transaksi_masuk"></small>
                         </h2>
                         <div class="row invoice-info">
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-sm invoice-col">
                                     <strong>Type Barang :</strong>
                                     <p id="type_barang"></p>
                             </div>
-                        
-                            <div class="col-sm-4 invoice-col">
-                                    <strong>No PR :</strong>
-                                    <p id="no_pr"></p>
-                            </div>
-                        
-                            <div class="col-sm-4 invoice-col">
-                                <strong>No PO :</strong>
-                                <p id="no_po"></p>
-                            </div>
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-sm invoice-col">
                                 <strong>No GRN :</strong>
                                 <p id="no_grn"></p>
                             </div>
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-sm invoice-col">
                                 <strong>Supplier :</strong>
                                 <p id="supplier"></p>
                             </div>
-                            <div class="col-sm-4 invoice-col">
+                            <div class="col-sm invoice-col">
                                 <strong>Jenis :</strong>
                                 <p id="jenis"></p>
                             </div>
@@ -130,8 +119,6 @@
                         console.log(params);
                         $('#tgl_transaksi_masuk').html(params.tgl_transaksi_masuk);
                         $('#type_barang').html(params.type_barang);
-                        $('#no_po').html(params.no_po);
-                        $('#no_pr').html(params.no_pr);
                         $('#no_grn').html(params.no_grn);
                         $('#supplier').html(params.supplier);
                         $('#jenis').html(params.jenis);
@@ -148,21 +135,18 @@
                 processing: true,
                 serverSide: true,
                 responsive: true,
+                ajax: "{{ route('tmasuk.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
                     },
                     {
+                        data: 'id',
+                        name: 'id'
+                    },
+                    {
                         data: 'type_barang',
                         name: 'type_barang'
-                    },
-                    {
-                        data: 'no_pr',
-                        name: 'no_pr'
-                    },
-                    {
-                        data: 'no_po',
-                        name: 'no_po'
                     },
                     {
                         data: 'no_grn',
@@ -188,22 +172,21 @@
                     },
                 ]
             });
-
             
             $('body').on('click', '.btn-remove', function() {
                 var result = confirm("Apakah Anda Yakin Ingin Menghapus Transaksi ini ?");
                 if (result) {
                     var id = $(this).attr("id");
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('tmasuk.index') }}" + '/destroy/' + id,
-                    success: function(data) {
-                        table.draw();
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
-                    }
-                });        
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('tmasuk.index') }}" + '/destroy/' + id,
+                        success: function(data) {
+                            table.draw();
+                        },
+                        error: function(data) {
+                            console.log('Error:', data);
+                        }
+                    });        
                 }
             });
         });

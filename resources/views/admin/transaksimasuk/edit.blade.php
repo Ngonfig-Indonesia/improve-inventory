@@ -15,10 +15,6 @@
                                 <input type="text" hidden value="{{ old('id', $data->id) }}" id="id">
                                 <input type="text" name="type_barang" class="form-control" id="" autocomplete="off" required value="{{ old('type_barang', $data->type_barang) }}">
                             </div>
-                            <div class="form-group">
-                                <label>Nomor PO</label>
-                                <input type="text" name="no_po" class="form-control" id="" autocomplete="off" required value="{{ old('no_po', $data->no_po) }}">
-                            </div>
                             <!-- /.form-group -->
                             <div class="row">
                                 <div class="col">
@@ -37,10 +33,6 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Nomor PR</label>
-                                <input type="text" name="no_pr" class="form-control" autocomplete="off" id="" required value="{{ old('no_pr', $data->no_pr) }}">
-                            </div>
                             <div class="form-group">
                                 <label>Nomor GRN</label>
                                 <input type="text" name="no_grn" class="form-control" autocomplete="off" id="" required value="{{ old('no_grn', $data->no_grn) }}">
@@ -134,7 +126,7 @@
                         var qty = document.querySelector('#qty').value;
                         var eom = document.querySelector('#eom').value;
                     if (!kode_item == "" || !nama_barang == "" || !qty == "" || !eom == "") {
-                        $('#listransaksi').append(`<tr id="remove-list"><td><input name="item_id[]" value="${id}" type="hidden"><input class="form-control" name="kode_item[]" type="text" readonly value="${kode_item}"></td><td><input class="form-control" name="nama_barang[]" type="text" readonly value="${nama_barang}"></td><td class="col-1"><input type="number" class="form-control" name="qty[]" min="1" max="10000" required value="${qty}"></td><td class="col-1"><input class="form-control" type="text" readonly name="eom[]" value="${eom}"></td><td class="col-1"><bottom class="btn btn-sm btn-danger hapus-list"><i class="fa fa-trash"></i></bottom></td></tr>`);
+                        $('#listransaksi').append(`<tr id="remove-list-item"><td><input name="item_id[]" value="${id}" type="hidden"><input class="form-control" name="kode_item[]" type="text" readonly value="${kode_item}"></td><td><input class="form-control" name="nama_barang[]" type="text" readonly value="${nama_barang}"></td><td class="col-1"><input type="number" class="form-control" name="qty[]" min="1" max="10000" required value="${qty}"></td><td class="col-1"><input class="form-control" type="text" readonly name="eom[]" value="${eom}"></td><td class="col-1"><bottom class="btn btn-sm btn-danger hapus-list-item"><i class="fa fa-trash"></i></bottom></td></tr>`);
                     }else{
                         alert('Form Tidak Boleh Kosong');
                     }
@@ -157,6 +149,9 @@
                     })
                     $(this).parents("#remove-list").remove();
                     }
+                });
+                $('body').on('click', '.hapus-list-item',function(){
+                    $(this).parents("#remove-list-item").remove();
                 });
 
                 $('#caribarang').select2({

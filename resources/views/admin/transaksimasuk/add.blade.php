@@ -14,10 +14,6 @@
                                 <label>Type Barang</label>
                                 <input type="text" name="type_barang" class="form-control" id="" autocomplete="off" required>
                             </div>
-                            <div class="form-group">
-                                <label>Nomor PO</label>
-                                <input type="text" name="no_po" class="form-control" id="" autocomplete="off" required>
-                            </div>
                             <!-- /.form-group -->
                             <div class="row">
                                 <div class="col">
@@ -36,10 +32,6 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Nomor PR</label>
-                                <input type="text" name="no_pr" class="form-control" id="" autocomplete="off" required>
-                            </div>
                             <div class="form-group">
                                 <label>Nomor GRN</label>
                                 <input type="text" name="no_grn" class="form-control" id="" autocomplete="off" required>

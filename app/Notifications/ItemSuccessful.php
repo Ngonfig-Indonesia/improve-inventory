@@ -56,7 +56,7 @@ class ItemSuccessful extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'data' => 'Create Item ' . $this->kode_item . ' Success'
+            'data' => $this->kode_item
         ];
     }
 }

@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('/auth/login');
-});
+})->name('login');
 
 Auth::routes();
 
@@ -60,13 +60,31 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/settings/user', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('/admin/settings/user/add', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
     Route::post('/admin/settings/user/store', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+    Route::get('/admin/settings/user/edit/{id}', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
+    Route::post('/admin/settings/user/update/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
     Route::get('/admin/settings/user/destroy/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
 
     // PERMISSION
     Route::get('/admin/settings/permission', [App\Http\Controllers\RoleController::class, 'index'])->name('permission.index');
     Route::get('/admin/settings/permission/add', [App\Http\Controllers\RoleController::class, 'create'])->name('permission.create');
     Route::post('/admin/settings/permission/store', [App\Http\Controllers\RoleController::class, 'store'])->name('permission.store');
+    Route::get('/admin/settings/permission/edit/{id}', [App\Http\Controllers\RoleController::class, 'edit'])->name('permission.edit');
     Route::get('/admin/settings/permission/destroy/{id}', [App\Http\Controllers\RoleController::class, 'destroy'])->name('permission.destroy');
 
+    // LAPORAN TRANSAKSI MASUK
+    Route::get('/admin/laporan/transaksi_masuk', [App\Http\Controllers\LaporanTransaksiMasuk::class, 'index'])->name('laporan.tmasuk');
+    Route::get('/admin/laporan/transaksi_masuk/between', [App\Http\Controllers\LaporanTransaksiMasuk::class, 'pertanggal'])->name('laporan.pertanggal.tmasuk');
+
+    // LAPORAN TRANSAKSI KELUAR
+    Route::get('/admin/laporan/transaksi_keluar', [App\Http\Controllers\LaporanTransaksiKeluar::class, 'index'])->name('laporan.tkeluar');
+    Route::get('/admin/laporan/transaksi_keluar/between', [App\Http\Controllers\LaporanTransaksiKeluar::class, 'pertanggal'])->name('laporan.pertanggal.keluar');
+
+    // NOTIFICATION
     Route::get('/mark-as-read', [App\Http\Controllers\ItemController::class, 'markAsRead'])->name('mark-as-read');
+
+    // TELEGRAM
+    Route::get('/admin/sendtelegram', [App\Http\Controllers\StockController::class, 'index'])->name('sendtelegram');
+
+    // LOGS
+    Route::get('/admin/logs/logs', [App\Http\Controllers\LogsController::class, 'index'])->name('logs');
 });

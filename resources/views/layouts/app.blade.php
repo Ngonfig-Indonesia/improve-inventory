@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Dashboard</title>
+    <title>Aplikasi Inventory</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -36,6 +36,7 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.0/css/toastr.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.5.0/css/dataTables.dateTime.min.css">
+    <link rel="stylesheet" href="{{ asset('dist/css/style.css')}}">
     @include('sweetalert::alert')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -69,28 +70,34 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
-                <li class="nav-item dropdown" id="readmessage">
+                <li class="nav-item dropdown" data-bs-spy="scroll" data-bs-root-margin="0px 0px -40%" data-bs-smooth-scroll="true" id="readmessage">
                      <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
                         <span class="badge badge-warning navbar-badge">{{auth()->user()->unreadNotifications->count()}}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        @foreach (auth()->user()->unreadNotifications as $notification)
-                        <div class="dropdown-divider"></div>
+                        <div class="list">
+                            <div class="dropdown-divider"></div>
+                                @foreach (auth()->user()->unreadNotifications as $notification)
+                                <a href="#" class="dropdown-item">
+                                    <i class="fas fa-envelope mr-2"></i> {{$notification->data['data']}}
+                                </a>
+                                @endforeach
+                            <div class="dropdown-divider"></div>
+                            @foreach (auth()->user()->readNotifications as $notification)
                             <a href="#" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> {{$notification->data['data']}}
-                            </a>
-                        @endforeach
+                                    <i class="fas fa-envelope mr-2"></i> {{$notification->data['data']}}
+                                </a>   
+                            @endforeach  
+                        </div>
                         <div class="dropdown-divider"></div>
-                        @foreach (auth()->user()->readNotifications as $notification)
-                          <a href="#" class="dropdown-item">
-                                <i class="fas fa-envelope mr-2"></i> {{$notification->data['data']}}
-                            </a>   
-                        @endforeach  
-                        <div class="dropdown-divider"></div>
-                        @if (auth()->user()->unreadNotifications)
-                            <a href="{{route('mark-as-read')}}" class="btn btn-success btn-sm dropdown-item dropdown-footer">Mark All as Read</a>
-                        @endif
+                        <div class="row">
+                            <div class="col">
+                            @if (auth()->user()->unreadNotifications)
+                                <a href="{{route('mark-as-read')}}" class="btn btn-success btn-sm dropdown-item dropdown-footer">Mark All as Read</a>
+                            @endif
+                        </div>
+                        </div>
                     </div>
                    
                 </li>
@@ -133,9 +140,6 @@
 
         <!-- Sidebar -->
         <div class="sidebar">
-            <!-- Sidebar user panel (optional) -->
-
-            <!-- Sidebar Menu -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                     data-accordion="false">
@@ -149,7 +153,8 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                   @can('item-list')
+                        <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-copy"></i>
                             <p>
@@ -170,16 +175,11 @@
                                     <p>Supplier</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>User</p>
-                                </a>
-                            </li>
-                            
                         </ul>
                     </li>
-                    <li class="nav-item">
+                   @endcan
+                    @can('tmasuk-list')
+                        <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-chart-pie"></i>
                             <p>
@@ -196,6 +196,7 @@
                             </li>
                         </ul>
                     </li>
+                    @endcan
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-tree"></i>
@@ -213,11 +214,26 @@
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-folder"></i>
+                            <i class="nav-icon fas fa-chart-pie"></i>
                             <p>
                                 Laporan
+                                <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('laporan.tmasuk')}}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Transaksi Masuk</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('laporan.tkeluar')}}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Transaksi Keluar</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-header">Setting & Permission</li>
                     <li class="nav-item">
@@ -228,10 +244,10 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                {{-- <a href="#" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Appearance</p>
-                                </a>
+                                </a> --}}
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('users.index')}}" class="nav-link">
@@ -293,10 +309,10 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        <strong>Copyright &copy Invetory SCM 2023</strong>
         All rights reserved.
         <div class="float-right d-none d-sm-inline-block">
-            <b>Version</b> 3.2.0
+            <b>Version</b> 1.0.0
         </div>
     </footer>
 

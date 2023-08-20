@@ -12,7 +12,7 @@ class transaksi_masuk extends Model
 
     protected $table = 'transaksi_masuks';
     protected $primarykey = 'id';
-    protected $fillable = ['type_barang', 'no_pr', 'no_po', 'no_grn', 'supplier', 'jenis', 'tgl_transaksi_masuk', 'keterangan'];
+    protected $fillable = ['type_barang', 'no_grn', 'supplier', 'jenis', 'tgl_transaksi_masuk', 'keterangan'];
 
     public function barangmasuk()
     {

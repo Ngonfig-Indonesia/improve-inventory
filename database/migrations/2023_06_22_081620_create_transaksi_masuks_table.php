@@ -14,17 +14,13 @@ return new class extends Migration
         Schema::create('transaksi_masuks', function (Blueprint $table) {
             $table->id();
             $table->string('type_barang');
-            $table->string('no_pr');
-            $table->string('no_po');
             $table->string('no_grn');
             $table->string('supplier');
-            $table->enum('jenis', ['comsumable','project'])->default('comsumable');
+            $table->enum('jenis', ['comsumable', 'project'])->default('comsumable');
             $table->date('tgl_transaksi_masuk');
             $table->text('keterangan')->default('');
 
             $table->timestamps();
-
-            
         });
     }
 

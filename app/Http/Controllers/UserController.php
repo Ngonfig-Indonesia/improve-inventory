@@ -10,13 +10,13 @@ use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
-    // function __construct()
-    // {
-    //     $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index', 'show']]);
-    //     $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
-    //     $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
-    //     $this->middleware('permission:user-delete', ['only' => ['destroy']]);
-    // }
+    function __construct()
+    {
+        $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index', 'show']]);
+        $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+    }
 
     public function index()
     {
@@ -46,6 +46,32 @@ class UserController extends Controller
         $user->assignRole($request->input('roles'));
 
         return back()->with('success', 'Tambah User Berhasil !');
+    }
+
+    public function edit($id)
+    {
+        $data = User::findOrFail($id);
+        $role = Role::all();
+        return view('/admin/settings/user/edit', compact('data', 'role'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|same:confirm-password',
+            'roles' => 'required'
+        ]);
+
+        $user = User::findOrFail($id);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        $user->roles()->sync([$request->input('roles')]);
+        return back()->with('success', 'Update User Berhasil !');
     }
 
     public function destroy($id)

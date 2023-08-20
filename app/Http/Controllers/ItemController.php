@@ -33,13 +33,14 @@ class ItemController extends Controller
             return DataTables::of($data)->addColumn('status', function (item $daftaritem) {
                 foreach ($daftaritem->item_details as $key) {
                     if ($daftaritem->qty > $key->max_qty) {
-                        $result = '<a class="btn btn-sm btn-danger">Stock Max!</>';
-                    } elseif ($daftaritem->qty == 0) {
-                        $result = '<a class="btn btn-sm btn-danger">Habis!</>';
-                    } elseif ($daftaritem->qty < $key->min_qty) {
-                        $result = '<a class="btn btn-sm btn-warning">Stock Limit!</>';;
+                        $result = '<a class="badge badge-primary">Stock Max!</>';
+                    } elseif ($daftaritem->qty <= $key->min_qty) {
+                        $result = '<a class="badge badge-warning">Stock Limit!</>';
                     } else {
-                        $result = '<a class="btn btn-sm btn-success">Stock Aman</>';
+                        $result = '<a class="badge badge-success">Stock Aman</>';
+                    }
+                    if ($daftaritem->qty === '0') {
+                        $result = '<a class="badge badge-danger">Habis!</>';;
                     }
                     return $result;
                 }
@@ -73,27 +74,31 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $data = Item::updateOrCreate([
-            'id' => $request->id,
-            'kode_item' => $request->kode_item,
-            'nama_barang' => $request->nama_barang,
-            'eom' => $request->eom,
-            'rak' => $request->rak
-        ]);
-        $detail = new item_detail;
-        $detail->min_qty = $request->min_qty;
-        $detail->max_qty = $request->max_qty;
-        $data->item_details()->save($detail);
+        try {
+            $data = Item::updateOrCreate([
+                'id' => $request->id,
+                'kode_item' => $request->kode_item,
+                'nama_barang' => $request->nama_barang,
+                'eom' => $request->eom,
+                'rak' => $request->rak
+            ]);
+            $detail = new item_detail;
+            $detail->min_qty = $request->min_qty;
+            $detail->max_qty = $request->max_qty;
+            $data->item_details()->save($detail);
 
-        $user = User::all();
-        Notification::send($user, new ItemSuccessful($data->kode_item));
-        return back()->with('success', 'Tambah Item Berhasil !');
+            $user = User::all();
+            Notification::send($user, new ItemSuccessful('Create Item ' . $data->kode_item . ' Success'));
+            return back()->with('success', 'Tambah Item Berhasil !');
+        } catch (\Exception $e) {
+            return back()->with('failed', $e);
+        }
     }
 
     public function markAsRead()
     {
         Auth::user()->unreadNotifications->markAsRead();
-        return redirect()->back();
+        return redirect()->route('logs');
     }
 
     /**
@@ -123,8 +128,8 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = Item::with('item_details')->findOrFail($id);
         try {
+            $data = Item::with('item_details')->findOrFail($id);
             $data->update([
                 'id' => $request->id,
                 'kode_item' => $request->kode_item,
@@ -133,17 +138,17 @@ class ItemController extends Controller
                 'rak' => $request->rak
             ]);
 
-            $detail = Item_detail::findOrFail($id);
+            $detail = item_detail::findOrFail($id);
             $detail->update([
                 'item_detail_id' => $request->item_detail_id,
                 'min_qty' => $request->min_qty,
                 'max_qty' => $request->max_qty
             ]);
-            return redirect()->back()
-                ->with('success', 'Tambah Data Berhasil!');
+            $user = User::all();
+            Notification::send($user, new ItemSuccessful('Update Item ' . $data->kode_item . ' Success'));
+            return back()->with('success', 'Update Item Berhasil !');
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Tambah Data Error!');
+            return back()->with('failed', 'Update Item Error !');
         }
     }
 
@@ -152,7 +157,14 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        $data = Item::where('id', $id);
-        $data->delete();
+        try {
+            $data = Item::where('id', $id);
+            $data->delete();
+            $user = User::all();
+            Notification::send($user, new ItemSuccessful('Delete Item ' . $data->kode_item . ' Success'));
+            return back()->with('success', 'Delete Item Berhasil !');
+        } catch (\Exception $e) {
+            return back()->with('failed', 'Delete Item Error !');
+        }
     }
 }

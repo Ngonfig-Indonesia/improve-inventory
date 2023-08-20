@@ -27,15 +27,7 @@
                                 <td>{{ $role->name}}</td>
                                 <td>
                                     <a href="{{ route('permission.destroy', $role->id)}}" id="{{ $role->id }}" onclick="confirm('Yakin Anda Ingin Menghapus?')" class="btn btn-sm btn-danger btn-role"><i class="fas fa-trash"></i></a>
-                                    {{-- <a class="btn btn-info" href="{{ route('roles.show',$role->id) }}">Show</a>
-                                    @can('role-edit')
-                                        <a class="btn btn-primary" href="{{ route('roles.edit',$role->id) }}">Edit</a>
-                                    @endcan
-                                    @can('role-delete')
-                                        {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
-                                            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                                        {!! Form::close() !!}
-                                    @endcan --}}
+                                    <a class="btn btn-sm btn-success" href="{{ route('permission.edit',$role->id) }}"><i class="fas fa-edit"></i></a>
                                 </td>
                             </tr>
                         @endforeach

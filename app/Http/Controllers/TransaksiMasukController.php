@@ -30,7 +30,7 @@ class TransaksiMasukController extends Controller
             return DataTables::of($data)->addColumn('action', function ($row) {
                 $actionBtn = "<a href='/admin/transaksimasuk/edit/" . $row->id . "' class='btn btn-sm btn-success'><i class='fa fa-edit'></i></> <a href='#' class='btn btn-sm btn-danger btn-remove' id='" . $row->id . " '><i class='fa fa-trash'></i></> <a class='btn btn-sm btn-primary view-transaksi' data-toggle='modal' data-target='#modal-xl' id='" . $row->id . " '><i class='fa fa-eye'></i></>";
                 return $actionBtn;
-            })->rawColumns(['action'])->addIndexColumn()->removeColumn('id')->make(true);
+            })->rawColumns(['action'])->addIndexColumn()->make(true);
         }
 
         return view('/admin/transaksimasuk/show');
@@ -71,8 +71,6 @@ class TransaksiMasukController extends Controller
                 } else {
                     $data = new transaksi_masuk;
                     $data->type_barang = $request->type_barang;
-                    $data->no_po = $request->no_po;
-                    $data->no_pr = $request->no_pr;
                     $data->no_grn = $request->no_grn;
                     $data->supplier = $request->supplier;
                     $data->jenis = $request->jenis;
@@ -130,8 +128,6 @@ class TransaksiMasukController extends Controller
             $data->update([
                 'id' => $request->id,
                 'type_barang' => $request->type_barang,
-                'no_po' => $request->no_po,
-                'no_pr' => $request->no_pr,
                 'no_grn' => $request->no_grn,
                 'supplier' => $request->supplier,
                 'jenis' => $request->jenis,

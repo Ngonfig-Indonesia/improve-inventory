@@ -41,6 +41,13 @@ class RoleController extends Controller
         return back()->with('success', 'Tambah Roler Berhasil !');
     }
 
+    public function edit($id)
+    {
+        $permission = Role::findOrFail($id);
+        $item = Permission::get();
+        return view('/admin/settings/permission/edit', compact('permission', 'item'));
+    }
+
     public function destroy($id)
     {
         try {
