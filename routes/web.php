@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin/settings/permission/add', [App\Http\Controllers\RoleController::class, 'create'])->name('permission.create');
     Route::post('/admin/settings/permission/store', [App\Http\Controllers\RoleController::class, 'store'])->name('permission.store');
     Route::get('/admin/settings/permission/edit/{id}', [App\Http\Controllers\RoleController::class, 'edit'])->name('permission.edit');
+    Route::post('/admin/settings/permission/update/{id}', [App\Http\Controllers\RoleController::class, 'update'])->name('permission.update');
     Route::get('/admin/settings/permission/destroy/{id}', [App\Http\Controllers\RoleController::class, 'destroy'])->name('permission.destroy');
 
     // LAPORAN TRANSAKSI MASUK

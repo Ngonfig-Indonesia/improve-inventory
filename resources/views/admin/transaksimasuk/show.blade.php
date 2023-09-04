@@ -13,7 +13,6 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>ID</th>
                             <th>Type Barang</th>
                             <th>No GRN</th>
                             <th>Supplier</th>
@@ -139,10 +138,6 @@
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'id',
-                        name: 'id'
                     },
                     {
                         data: 'type_barang',

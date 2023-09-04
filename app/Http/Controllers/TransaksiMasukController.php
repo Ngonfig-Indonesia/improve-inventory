@@ -30,7 +30,7 @@ class TransaksiMasukController extends Controller
             return DataTables::of($data)->addColumn('action', function ($row) {
                 $actionBtn = "<a href='/admin/transaksimasuk/edit/" . $row->id . "' class='btn btn-sm btn-success'><i class='fa fa-edit'></i></> <a href='#' class='btn btn-sm btn-danger btn-remove' id='" . $row->id . " '><i class='fa fa-trash'></i></> <a class='btn btn-sm btn-primary view-transaksi' data-toggle='modal' data-target='#modal-xl' id='" . $row->id . " '><i class='fa fa-eye'></i></>";
                 return $actionBtn;
-            })->rawColumns(['action'])->addIndexColumn()->make(true);
+            })->rawColumns(['action'])->addIndexColumn()->removeColumn('id')->make(true);
         }
 
         return view('/admin/transaksimasuk/show');

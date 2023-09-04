@@ -44,8 +44,22 @@ class RoleController extends Controller
     public function edit($id)
     {
         $permission = Role::findOrFail($id);
+        $rolePermissions = $permission->permissions->pluck('name')->toArray();
         $item = Permission::get();
-        return view('/admin/settings/permission/edit', compact('permission', 'item'));
+        return view('/admin/settings/permission/edit', compact('permission', 'item', 'rolePermissions'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'permission' => 'required',
+        ]);
+        $role = Role::findOrFail($id);
+        $role->update(['name' => $request->input('name')]);
+        $role->syncPermissions($request->input('permission'));
+
+        return back()->with('success', 'Update Roler Berhasil !');
     }
 
     public function destroy($id)

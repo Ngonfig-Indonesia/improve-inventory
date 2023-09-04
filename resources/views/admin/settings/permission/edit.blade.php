@@ -17,7 +17,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <form action="{{ route('permission.store')}}" method="post">
+                <form action="{{ route('permission.update', $permission->id)}}" method="post">
                     @csrf
                     <div class="row">
                         <div class="col">
@@ -33,7 +33,14 @@
                         @foreach ($item as $items)
                         <div class="col-2">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" id="customCheckbox2" name="permission[]" value="{{ $items->id}}">
+                                 <input type="checkbox" 
+                                name="permission[{{ $items->name }}]"
+                                value="{{ $items->name }}"
+                                class='permission'
+                                {{ in_array($items->name, $rolePermissions) 
+                                    ? 'checked'
+                                    : '' }}>
+                                {{-- <input type="checkbox" id="customCheckbox2" name="permission[]" value="{{ $items->id}}"> --}}
                                 <label>{{ $items->name}}</label>
                             </div>
                         </div>
